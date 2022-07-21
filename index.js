@@ -6,13 +6,14 @@ const dns = require("dns");
 var bodyParser = require('body-parser')
 const fs = require('fs');
 const { json } = require('body-parser');
+const ip = require('ip');
 
 // Basic Configuration
 const port = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }))
-app.use('/public', express.static(`${process.cwd()}/public`));
+app.use(express.static('./public'));
 
 app.get('/', function(req, res) {
   res.sendFile(process.cwd() + '/views/index.html');
@@ -72,6 +73,6 @@ app.get('/api/shorturl/:number', function(req, res) {
     }
 });
 
-app.listen(port, function() {
-  console.log(`Listening on port ${port}`);
-});
+const listener = app.listen(process.env.PORT || 3000, () => {
+  console.log(`Your app is listening on http://${ip.address()}:${listener.address().port}`)
+})
